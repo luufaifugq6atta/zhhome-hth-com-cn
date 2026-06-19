@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://luufaifugq6atta.github.io/zhhome-hth-com-cn/sitemap.xml
