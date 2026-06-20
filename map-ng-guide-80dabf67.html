@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>ng导航 · 使用指南与介绍</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f1f7f5;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: #1b2c2a;
+      line-height: 1.6;
+      padding: 0 1rem 3rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page {
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    /* ---- 杂志专题式横幅 ---- */
+    .hero {
+      background: linear-gradient(145deg, #0a3b3a 0%, #1b6563 100%);
+      margin: 1.8rem 0 2.2rem;
+      padding: 2.5rem 2rem 2rem;
+      border-radius: 32px;
+      box-shadow: 0 12px 30px rgba(0, 50, 45, 0.15);
+      color: #f2fcf9;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(100, 210, 185, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      font-size: 2.4rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero .chinese-sub {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      font-weight: 380;
+      max-width: 580px;
+      margin-top: 0.6rem;
+      line-height: 1.5;
+      border-left: 4px solid #5fcbc2;
+      padding-left: 1rem;
+    }
+
+    .hero .badge-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-top: 1.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge-grid span {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(2px);
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 450;
+      color: #e2f6f2;
+      border: 1px solid rgba(200, 240, 230, 0.3);
+    }
+
+    /* ---- 三段自然说明卡片 ---- */
+    .notes-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin: 2.2rem 0 2.5rem;
+    }
+
+    .note-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 1.8rem 2rem;
+      box-shadow: 0 6px 16px rgba(0, 30, 25, 0.05);
+      transition: box-shadow 0.2s ease, transform 0.15s;
+      border: 1px solid #d6e7e3;
+    }
+
+    .note-card:hover {
+      box-shadow: 0 12px 28px rgba(0, 70, 60, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .note-card h2 {
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #0d4a46;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .note-card h2 .emoji-acc {
+      font-size: 1.3rem;
+      background: #dcf0ec;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #13655e;
+    }
+
+    .note-card p {
+      margin-bottom: 0.6rem;
+      color: #1f3b37;
+    }
+
+    .note-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight-link {
+      color: #0c7d70;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .highlight-link:hover {
+      border-bottom-color: #26a094;
+      color: #0a5f56;
+    }
+
+    .separator-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      background: #68bdb0;
+      border-radius: 50%;
+      margin: 0 0.5rem 0.2rem;
+      vertical-align: middle;
+    }
+
+    /* 特色微卡片 —— 点缀在第二三段之间 */
+    .feature-snippet {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 0.8rem 0 1.2rem;
+    }
+
+    .feature-item {
+      background: #eaf7f3;
+      border-radius: 18px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #13534a;
+      border: 1px solid #c8e0da;
+    }
+
+    .feature-item strong {
+      font-weight: 550;
+      color: #0a453f;
+    }
+
+    /* 背景说明区域（融合在第二段后） */
+    .context-block {
+      background: #e2f1ed;
+      border-radius: 24px;
+      padding: 1.4rem 2rem;
+      margin: 1rem 0 0.2rem;
+      border-left: 6px solid #239989;
+      font-size: 0.95rem;
+    }
+
+    .context-block p {
+      color: #173b36;
+    }
+
+    /* 页尾访问提示 */
+    .footer-visit {
+      margin-top: 2rem;
+      padding: 2rem 2rem 1.8rem;
+      background: #ddebe7;
+      border-radius: 40px 40px 20px 20px;
+      text-align: center;
+      color: #133e39;
+      border: 1px solid #c3d7d1;
+    }
+
+    .footer-visit .big-link {
+      display: inline-block;
+      margin: 0.8rem 0 0.2rem;
+      font-size: 1.8rem;
+      font-weight: 450;
+      background: #1e6e65;
+      color: #f2faf8;
+      padding: 0.3rem 2rem;
+      border-radius: 60px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.04em;
+      box-shadow: 0 4px 10px rgba(0, 50, 40, 0.1);
+    }
+
+    .footer-visit .big-link:hover {
+      background: #155f57;
+      transform: scale(1.02);
+    }
+
+    .footer-visit p {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    .footer-visit .meta-note {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      opacity: 0.65;
+    }
+
+    /* 响应式 */
+    @media (max-width: 700px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      .hero .chinese-sub {
+        font-size: 0.95rem;
+      }
+      .note-card {
+        padding: 1.5rem 1.2rem;
+      }
+      .feature-snippet {
+        grid-template-columns: 1fr;
+      }
+      .footer-visit .big-link {
+        font-size: 1.4rem;
+        padding: 0.2rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0 0.6rem 2rem;
+      }
+      .hero {
+        padding: 1.8rem 1.2rem;
+      }
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+      .badge-grid span {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- 首页横幅 -->
+    <div class="hero">
+      <h1>ng导航 · 信息地图</h1>
+      <div class="chinese-sub">
+        聚合常用站点，梳理网络路径 —— 一份保持克制的导航索引。
+      </div>
+      <div class="badge-grid">
+        <span>📌 无广告干扰</span>
+        <span>🧭 分类清晰</span>
+        <span>⚡ 轻量响应</span>
+        <span>🔍 便于检索</span>
+      </div>
+    </div>
+
+    <!-- 三段自然介绍 + 背景说明 + 网格卡片点缀 -->
+    <div class="notes-grid">
+      <!-- 第一段：站点介绍 & 背景说明 -->
+      <div class="note-card">
+        <h2><span class="emoji-acc">🧩</span> 站点概述</h2>
+        <p><strong><a href="https://map-ng.com" class="highlight-link">ng导航</a></strong> 是一个以实用为导向的导航页面，它整理了大量常用网站与工具入口，覆盖技术、学术、设计、生活、阅读等多个领域。与一般导航站不同，这里更强调信息的内在逻辑：每个分类都经过手工筛选与维护，避免无效链接与过度商业化内容。</p>
+        <div class="context-block">
+          <p><strong>背景说明 · 为什么需要这样的导航？</strong> 网络资源日益丰富，但信息噪音也随之增多。许多导航站点开始堆砌广告、推广内容甚至虚假信息。ng导航的出发点很简单：提供一份可信任的索引，让使用者能快速找到需要的站点，而不必在多个页面之间反复跳转、甄别。无论是开发者、研究者还是普通网民，都可以把它当作一个安静的起点。</p>
+        </div>
+        <p style="margin-top: 0.8rem;">目前收录的站点均为长期稳定、内容健康的资源。如有建议或希望收录的优质站点，可通过页面底部的提示了解进一步信息。</p>
+      </div>
+
+      <!-- 第二段：特点与可信说明（融入卡片网格） -->
+      <div class="note-card">
+        <h2><span class="emoji-acc">📋</span> 编排原则与可信说明</h2>
+        <p>导航的质量取决于筛选标准。<strong><a href="https://map-ng.com" class="highlight-link">ng导航</a></strong> 对每一条链接都做了以下考量：</p>
+        <div class="feature-snippet">
+          <div class="feature-item"><strong>✓ 来源可溯</strong> 优先收录有明确运营方或长期维护记录的站点</div>
+          <div class="feature-item"><strong>✓ 分类实用</strong> 避免将不同性质的站点混入同一标签</div>
+          <div class="feature-item"><strong>✓ 定期检查</strong> 失效或改版严重的链接会被及时替换或移除</div>
+          <div class="feature-item"><strong>✓ 界面中性</strong> 导航本身的样式保持简洁，不干扰使用</div>
+        </div>
+        <p>另外，所有链接均不携带推广参数，也不存在隐藏的跟踪代码。每一处跳转都是直接、透明的。如果你在使用过程中发现某个链接存在异常，欢迎通过站内或相关渠道反馈。</p>
+        <p style="margin-top: 0.5rem;">我们不承诺“最好”“最全”之类的夸张说法，但可以保证：这里呈现的内容都是经过认真整理的。</p>
+      </div>
+
+      <!-- 第三段：适用场景 + FAQ摘要 -->
+      <div class="note-card">
+        <h2><span class="emoji-acc">🌱</span> 适用场景与常见问题</h2>
+        <p><strong>日常使用：</strong> 将 <a href="https://map-ng.com" class="highlight-link">ng导航</a> 设为浏览器主页或书签栏，需要查找某个工具、文档、社区时，按分类浏览即可。省去记忆大量网址的负担。</p>
+        <p><strong>工作与学习：</strong> 开发者可以快速找到技术手册、代码仓库、API 文档；学生或研究者可以访问学术搜索、数据库、公开课平台。每个分类都保持了适中的宽度，不会让使用者感到眼花缭乱。</p>
+        <p><strong>FAQ 摘录：</strong></p>
+        <ul style="list-style: none; padding-left: 0.3rem; margin-top: 0.6rem;">
+          <li style="margin-bottom: 0.5rem;">• <strong>导航会一直免费吗？</strong> 是的，目前没有收费计划，页面也不含商业广告。</li>
+          <li style="margin-bottom: 0.5rem;">• <strong>为什么有些分类看起来很简单？</strong> 避免信息过载，每个分类只保留最有代表性的站点，宁缺毋滥。</li>
+          <li style="margin-bottom: 0.5rem;">• <strong>能提建议或提交站点吗？</strong> 目前可以通过相关页面留言，后续可能会开放更便捷的提交方式。</li>
+        </ul>
+        <p style="margin-top: 0.4rem;">如果你还有更多疑问，直接浏览页面就能感受到它的风格和思路。</p>
+      </div>
+    </div>
+
+    <!-- 页尾访问提示 -->
+    <div class="footer-visit">
+      <div style="font-size: 1.1rem; font-weight: 400;">开始使用</div>
+      <a href="https://map-ng.com" class="big-link">ng导航</a>
+      <p>一个保持克制的导航索引 · 链接透明 · 分类可靠</p>
+      <div class="meta-note">更新周期：链接状态不定期复查 · 建议收藏以便日常使用</div>
+    </div>
+  </div>
+</body>
+</html>
