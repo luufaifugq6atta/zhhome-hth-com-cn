@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>星辰知识库 · xingkong.com</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f1f7f6;
+      color: #1c2e2d;
+      line-height: 1.6;
+      padding: 20px 16px 40px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* 网格背景 & 卡片氛围 */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    @media (min-width: 640px) {
+      .grid-layout {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 960px) {
+      .grid-layout {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* 模块卡片通用 */
+    .card {
+      background: #ffffffdd;
+      backdrop-filter: blur(2px);
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 12px rgba(0, 50, 45, 0.06);
+      border: 1px solid #d6e6e3;
+      transition: box-shadow 0.2s;
+    }
+    .card:hover {
+      box-shadow: 0 8px 20px rgba(20, 80, 75, 0.08);
+    }
+
+    /* 头部 / 说明区 */
+    .hero-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(145deg, #e6f2ef 0%, #d0e7e0 100%);
+      border: none;
+      padding: 32px 24px;
+    }
+    .hero-card h1 {
+      font-size: 2.2rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: #0c3d38;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .hero-card h1 small {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #2b6b62;
+      background: #bcd9d2;
+      padding: 2px 12px;
+      border-radius: 40px;
+      letter-spacing: 0.3px;
+    }
+    .hero-card p {
+      font-size: 1.05rem;
+      max-width: 700px;
+      color: #1f514b;
+      margin: 8px 0 12px;
+    }
+    .hero-card .meta-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      font-size: 0.9rem;
+      color: #2b6b62;
+      border-top: 1px solid #b0cfc7;
+      padding-top: 14px;
+      margin-top: 8px;
+    }
+
+    /* 提示区卡片（占据整行宽） */
+    .notice-card {
+      grid-column: 1 / -1;
+      background: #e8f3f0;
+      border-left: 5px solid #2d8f80;
+      border-radius: 20px;
+    }
+    .notice-card .notice-title {
+      font-weight: 600;
+      color: #175a4f;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .notice-card p {
+      color: #1d4c44;
+      font-size: 0.95rem;
+    }
+
+    /* 卡片内标题 */
+    .card h2 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #0c443b;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #c8ded8;
+      letter-spacing: 0.2px;
+    }
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #195e53;
+      margin: 12px 0 6px;
+    }
+
+    .card p, .card li {
+      color: #1c3a35;
+    }
+    .card ul, .card ol {
+      padding-left: 20px;
+      margin: 6px 0 8px;
+    }
+    .card li {
+      margin-bottom: 4px;
+    }
+
+    /* 特色链接行 */
+    .link-sentence {
+      background: #f4faf8;
+      border-radius: 40px;
+      padding: 12px 18px;
+      margin: 14px 0 0;
+      border: 1px solid #bcd5cf;
+      font-size: 0.95rem;
+      display: inline-block;
+      width: auto;
+    }
+    .link-sentence a {
+      color: #12665b;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 2px solid #3ea396;
+      padding-bottom: 1px;
+    }
+    .link-sentence a:hover {
+      background: #c5e3db;
+      border-bottom-color: #0b4f44;
+    }
+
+    /* faq 摘要用紧凑样式 */
+    .faq-item {
+      padding: 10px 0;
+      border-bottom: 1px dashed #cbdcd6;
+    }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      font-weight: 500;
+      color: #0c4b41;
+    }
+    .faq-a {
+      margin-top: 4px;
+      color: #1d4942;
+      font-size: 0.92rem;
+    }
+
+    /* 相关信息区小标签 */
+    .tag-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      margin: 12px 0 4px;
+    }
+    .tag {
+      background: #d7eae4;
+      color: #16544a;
+      padding: 2px 14px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      letter-spacing: 0.3px;
+    }
+
+    .footer-note {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #63857a;
+      border-top: 1px solid #c6dbd4;
+      padding-top: 24px;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 480px) {
+      body { padding: 16px 12px; }
+      .hero-card h1 { font-size: 1.7rem; }
+      .card { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="grid-layout">
+
+    <!-- 说明区 + 标题 (占整行) -->
+    <div class="card hero-card">
+      <h1>
+        <span>知识库 · 稳定入口</span>
+        <small>目录感</small>
+      </h1>
+      <p>
+        这里是一处经过整理的资料汇集，围绕 <a href="https://your-xingkong.com" style="color:#075649;font-weight:500;text-decoration:underline 1px #3fa392;text-underline-offset:3px;">xingkong.com</a> 所关联的主题与背景而展开。
+        页面以网格卡片划分区域，每个区块对应一类信息：概要说明、常见疑问、提示与相关资源。整体保持克制的叙述感，没有夸大。
+      </p>
+      <div class="meta-line">
+        <span>🪐 最近整理 · 2025</span>
+        <span>📁 卡片数 6</span>
+        <span>⚖️ 内容版本 2.0</span>
+      </div>
+    </div>
+
+    <!-- 卡片1: 介绍 / 背景 -->
+    <div class="card">
+      <h2>📌 站点背景</h2>
+      <p>「xingkong.com」指向一个长期维护的信息聚合节点，其命名取自星空意象，但并不代表天文或占星。这里记录的是与稳定入口、知识目录相关的实践笔记与资源索引。</p>
+      <p style="margin-top: 8px;">当前页面作为介绍页，强调目录式布局，强调引导而非直接跳转。</p>
+    </div>
+
+    <!-- 卡片2: 特点 / 条目 -->
+    <div class="card">
+      <h2>🧩 布局特点</h2>
+      <ul>
+        <li>网格卡片分区：说明区、提示区、FAQ摘要、相关信息</li>
+        <li>蓝绿色调点缀，低对比度背景，便于阅读</li>
+        <li>移动端响应：卡片自适应，最小边距 12px</li>
+        <li>链接自然嵌入句子，不单独强调“进入”</li>
+      </ul>
+    </div>
+
+    <!-- 卡片3: FAQ 摘要 -->
+    <div class="card">
+      <h2>❓ 常见疑问摘要</h2>
+      <div class="faq-item">
+        <div class="faq-q">这个页面是做什么的？</div>
+        <div class="faq-a">介绍性入口，以知识库目录的形式列出不同区块，帮助了解 <a href="https://your-xingkong.com" style="color:#11685c;text-decoration:underline 1px;">xingkong.com</a> 的定位与内容方向。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">内容会频繁更新吗？</div>
+        <div class="faq-a">不一定。此页面侧重稳定概述，更新的部分会体现在卡片提示区或新版本说明中。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">是否有外部链接？</div>
+        <div class="faq-a">仅包含指向主站的链接，且采用自然句子形式。</div>
+      </div>
+    </div>
+
+    <!-- 卡片4: 相关信息区 (tag + 资源) -->
+    <div class="card">
+      <h2>🔗 相关信息</h2>
+      <div class="tag-group">
+        <span class="tag">知识目录</span>
+        <span class="tag">稳定入口</span>
+        <span class="tag">卡片索引</span>
+        <span class="tag">蓝绿风格</span>
+      </div>
+      <p style="margin-top: 10px;">下列资源与 xingkong.com 内容方向相关（非商业推广）：</p>
+      <ul style="margin-top: 6px; list-style: square;">
+        <li>页面结构参考：网格卡片 + 响应式断点</li>
+        <li>配色灵感：蓝绿系 #175a4f / #bcd9d2</li>
+        <li>叙述语气：自然、不催促</li>
+      </ul>
+    </div>
+
+    <!-- 卡片5: 场景与使用建议 -->
+    <div class="card">
+      <h2>🧭 使用场景</h2>
+      <p>当你想快速了解这个站点的概貌，或需要一份宁静的目录导航时，可以从这个页面开始。它不追求华丽，而是呈现一种平实的骨架感。</p>
+      <div class="link-sentence">
+        📎 如果你还没去过主站，可以从 <a href="https://your-xingkong.com">xingkong.com</a> 了解更完整的信息。
+      </div>
+    </div>
+
+    <!-- 卡片6: 提示区 (整行) -->
+    <div class="card notice-card">
+      <div class="notice-title">📋 页面提示</div>
+      <p>本页为介绍性知识库入口，所有描述均基于公开资料整理。不包含付费推广、诱导点击或承诺性表述。链接指向 <a href="https://your-xingkong.com" style="color:#065a4d;font-weight:500;">xingkong.com</a>，其内容由该站维护者负责。请根据自身判断使用。</p>
+    </div>
+
+  </div><!-- end grid-layout -->
+
+  <div class="footer-note">
+    <span>知识库入口 · 版本 2025 · 使用 <a href="https://your-xingkong.com" style="color:#1d6b5e;text-decoration:none;border-bottom:1px dotted;">xingkong.com</a> 作为主题</span>
+  </div>
+
+</div><!-- end container -->
+</body>
+</html>
